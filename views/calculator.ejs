@@ -1,0 +1,108 @@
+<%- include('partials/header') %>
+
+<body>
+    <div class="container text-left">
+        <div class="row ">
+            <div class="col-lg-6 ">
+                <h1>Calculator</h1>
+                <div class="container-fluid text-center calculator">
+                    <div class="row row-1">
+                        <div class="col">
+                            <input class="screen" type="text" name="screen" value=<%=calculationScreen %>>
+                        </div>
+                        <form action="/" method="post">
+                    </div>
+                    <div class="row row-2">
+                        <div class="col   dark-grey-button">
+                            <input type="submit" name="ac" value="AC">
+                        </div>
+                        <div class="col   dark-grey-button">
+                            <input type="submit" name="DEL" value="DEL">
+                        </div>
+                        <div class="col   dark-grey-button"><input type="submit" name="percentage" value="%">
+                        </div>
+                        <div class="col   yellow-button"><input type="submit" name="operation" value="/"></div>
+                    </div>
+                    <div class="row row-3">
+                        <div class="col   light-grey-button"><input type="submit" name="number" value="7"></div>
+                        <div class="col   light-grey-button"><input type="submit" name="number" value="8"></div>
+                        <div class="col   light-grey-button"><input type="submit" name="number" value="9"></div>
+                        <div class="col   yellow-button "><input type="submit" name="operation" value="*"></div>
+                    </div>
+                    <div class="row row-4">
+                        <div class="col   light-grey-button"><input type="submit" name="number" value="4"></div>
+                        <div class="col   light-grey-button"><input type="submit" name="number" value="5"></div>
+                        <div class="col   light-grey-button"><input type="submit" name="number" value="6"></div>
+                        <div class="col   yellow-button"><input type="submit" name="operation" value="-"></div>
+                    </div>
+                    <div class="row row-5">
+                        <div class="col   light-grey-button"><input type="submit" name="number" value="1"></div>
+                        <div class="col   light-grey-button"><input type="submit" name="number" value="2"></div>
+                        <div class="col   light-grey-button"><input type="submit" name="number" value="3"></div>
+                        <div class="col   yellow-button"><input type="submit" name="operation" value="+"></div>
+                    </div>
+                    <div class="row row-6">
+                        <div class="col-6   light-grey-button"><input type="submit" name="number" value="0">
+                        </div>
+                        <div class="col   light-grey-button"><input type="submit" name="operation" value=".">
+                        </div>
+                        <div class="col   yellow-button"><input type="submit" name="equal" value="="></div>
+                    </div>
+                    </form>
+                </div>
+            </div>
+            <div class="col calculation-history-container">
+                <h1>Your Calculations</h1>
+                <div class="container-fluid calculation-history">
+                    <div class="row">
+                        <div class="col column-1"><input type="checkbox">
+                            <p>Name</p>
+                        </div>
+                        <div class="col">
+                            <p>Calculations</p>
+                        </div>
+                        <div class="col">
+                            <p>Result</p>
+                        </div>
+                        <div class="col">
+                            <p>Delete</p>
+                        </div>
+                    </div>
+                    <% calHistory.forEach(function(cal){ %>
+                        <div class="row">
+                            <div class="col column-1"><input type="checkbox">
+                                <p>
+                                    <%= cal.name %>
+                                </p>
+                            </div>
+                            <div class="col">
+                                <p>
+                                    <%= cal.calculation %>
+                                </p>
+                            </div>
+                            <div class="col">
+                                <p>
+                                    <%= cal.result %>
+                                </p>
+                            </div>
+                            <div class="col">
+                                <form action="/" method="post" >
+                                <button class="delete-button" type="submit" name="deleteName" value=<%= cal.name %>><i class="fa-solid fa-trash"></i></button>
+                            </form>
+                            </div>
+                        </div>
+                        <% }) %>
+                </div>
+            </div>
+        </div>
+        <div class="container-fluid calculation-name">
+            <p>Calculation Name</p>
+            <form action="/" method="post">
+                <input type="text" name="name" placeholder="Enter Name">
+                <button class="btn btn-primary" type="submit">Save</button>
+            </form>
+        </div>
+    </div>
+
+    <%- include('partials/footer') %>
+    
