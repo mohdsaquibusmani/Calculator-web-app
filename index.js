@@ -4,7 +4,8 @@ const bodyParser = require('body-parser');
 const ejs = require("ejs");
 const mongoose = require("mongoose");
 //require database-model
-const Cal = require("./models/calculation")
+const Cal = require("./models/calculation");
+const _ = require("lodash");
 
 const app = express();
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -75,7 +76,7 @@ app.post("/", async (req, res) => {
   }
 
   if (req.body.name) {
-    const userName = req.body.name;
+    const userName = _.kebabCase(req.body.name);
     await saveOrUpdateCalculation(userName);
     res.redirect("/");
   }
