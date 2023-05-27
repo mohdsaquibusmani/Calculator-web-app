@@ -82,8 +82,7 @@ app.post("/", async (req, res) => {
 
   if (req.body.deleteName) {
     const userName = req.body.deleteName;
-    let x = await Cal.findOne({ name: userName });
-    await Cal.findByIdAndDelete(x.id);
+    await Cal.deleteOne({ name: userName });
     res.redirect("/");
   }
 });
