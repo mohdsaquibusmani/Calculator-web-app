@@ -8,45 +8,45 @@
                 <div class="container-fluid text-center calculator">
                     <div class="row row-1">
                         <div class="col">
-                            <input class="screen" type="text" name="screen" value=<%=calculationScreen %>>
+                            <input class="screen" type="text" name="screen" value="">
                         </div>
-                        <form action="/" method="post">
+                        <form action="/" id="myForm" method="post">
                     </div>
                     <div class="row row-2">
                         <div class="col   dark-grey-button">
-                            <input type="submit" name="ac" value="AC">
+                            <input type="button" id="inputField" onclick="sendData(event)" name="ac" value="AC">
                         </div>
                         <div class="col   dark-grey-button">
-                            <input type="submit" name="DEL" value="DEL">
+                            <input type="button" id="inputField" onclick="sendData(event)" name="DEL" value="DEL">
                         </div>
-                        <div class="col   dark-grey-button"><input type="submit" name="percentage" value="%">
+                        <div class="col   dark-grey-button"><input type="button" id="inputField" onclick="sendData(event)" name="percentage" value="%">
                         </div>
-                        <div class="col   yellow-button"><input type="submit" name="operation" value="/"></div>
+                        <div class="col   yellow-button"><input type="button" id="inputField" onclick="sendData(event)" name="operation" value="/"></div>
                     </div>
                     <div class="row row-3">
-                        <div class="col   light-grey-button"><input type="submit" name="number" value="7"></div>
-                        <div class="col   light-grey-button"><input type="submit" name="number" value="8"></div>
-                        <div class="col   light-grey-button"><input type="submit" name="number" value="9"></div>
-                        <div class="col   yellow-button "><input type="submit" name="operation" value="*"></div>
+                        <div class="col   light-grey-button"><input type="button" id="inputField" onclick="sendData(event)" name="number" value="7"></div>
+                        <div class="col   light-grey-button"><input type="button" id="inputField" onclick="sendData(event)" name="number" value="8"></div>
+                        <div class="col   light-grey-button"><input type="button" id="inputField" onclick="sendData(event)" name="number" value="9"></div>
+                        <div class="col   yellow-button "><input type="button" id="inputField" onclick="sendData(event)" name="operation" value="*"></div>
                     </div>
                     <div class="row row-4">
-                        <div class="col   light-grey-button"><input type="submit" name="number" value="4"></div>
-                        <div class="col   light-grey-button"><input type="submit" name="number" value="5"></div>
-                        <div class="col   light-grey-button"><input type="submit" name="number" value="6"></div>
-                        <div class="col   yellow-button"><input type="submit" name="operation" value="-"></div>
+                        <div class="col   light-grey-button"><input type="button" id="inputField" onclick="sendData(event)" name="number" value="4"></div>
+                        <div class="col   light-grey-button"><input type="button" id="inputField" onclick="sendData(event)" name="number" value="5"></div>
+                        <div class="col   light-grey-button"><input type="button" id="inputField" onclick="sendData(event)" name="number" value="6"></div>
+                        <div class="col   yellow-button"><input type="button" id="inputField" onclick="sendData(event)" name="operation" value="-"></div>
                     </div>
                     <div class="row row-5">
-                        <div class="col   light-grey-button"><input type="submit" name="number" value="1"></div>
-                        <div class="col   light-grey-button"><input type="submit" name="number" value="2"></div>
-                        <div class="col   light-grey-button"><input type="submit" name="number" value="3"></div>
-                        <div class="col   yellow-button"><input type="submit" name="operation" value="+"></div>
+                        <div class="col   light-grey-button"><input type="button" id="inputField" onclick="sendData(event)" name="number" value="1"></div>
+                        <div class="col   light-grey-button"><input type="button" id="inputField" onclick="sendData(event)" name="number" value="2"></div>
+                        <div class="col   light-grey-button"><input type="button" id="inputField" onclick="sendData(event)" name="number" value="3"></div>
+                        <div class="col   yellow-button"><input type="button" id="inputField" onclick="sendData(event)" name="operation" value="+"></div>
                     </div>
                     <div class="row row-6">
-                        <div class="col-6   light-grey-button"><input type="submit" name="number" value="0">
+                        <div class="col-6   light-grey-button"><input type="button" id="inputField" onclick="sendData(event)" name="number" value="0">
                         </div>
-                        <div class="col   light-grey-button"><input type="submit" name="operation" value=".">
+                        <div class="col   light-grey-button"><input type="button" id="inputField" onclick=sendData(event) name="operation" value=".">
                         </div>
-                        <div class="col   yellow-button"><input type="submit" name="equal" value="="></div>
+                        <div class="col   yellow-button"><input type="button" id="inputField" onclick=sendData(event) name="operation" value="="></div>
                     </div>
                     </form>
                 </div>
@@ -103,6 +103,66 @@
             </form>
         </div>
     </div>
+    
 
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        var temp="";
+        let result ="";
+        let calhis = "";
+        function sendData(event) {
+            event.preventDefault(); // Prevent form submission
+            
+            var inputValue = $(event.target).val();
+            
+            temp+=inputValue;
+            result = temp;
+            if(inputValue === "%"){
+                temp = temp.slice(0,-1);
+                try{
+                    
+                    result = eval(temp)/100;
+                }catch(err){
+                    result = "Syntax Error";
+                }
+                temp = "";
+            }
+            if( inputValue === "=" ){
+                temp = temp.slice(0,-1);
+                calhis = temp;
+                try{
+
+                    result = eval(temp);
+                }catch(err){
+                    result = "Syntax Error";
+                }
+                temp = "";
+            }
+            if(inputValue === "AC"){
+                result ="";
+                temp=""; 
+            }
+            if(inputValue === "DEL"){
+                result=result.slice(0,-4);
+                temp = result;
+            }
+            $('.screen').val(result);
+            if(inputValue==="="){$.ajax({
+                url: '/',
+                method: 'POST',
+                contentType: 'application/x-www-form-urlencoded',
+                data: {
+                    inputValue: calhis,
+                    result : result
+                },
+                success: function(response) {
+                    console.log(response);
+                }
+            });}
+        }
+        
+
+</script>
     <%- include('partials/footer') %>
     

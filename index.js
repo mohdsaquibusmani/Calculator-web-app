@@ -34,50 +34,22 @@ app.listen(PORT, () => {
   console.log(`Server has started on port ${PORT}`);
 });
 
-let calculation = "";
-let tempCal = "";
-let result = 0;
-
+let resultCal = "";
+let inputValue = "";
 app.get("/", async (req, res) => {
-  calculation = "";
-  tempCal = "";
   const x = await fetchCalHistory();
-  res.render("calculator", { calculationScreen: calculation, calHistory: x });
+  res.render("calculator", {calHistory: x});
 });
 
 app.post("/", async (req, res) => {
-  const x = await fetchCalHistory();
-
-  if (req.body.number || req.body.operation) {
-    handleNumberOrOperation(req.body.number, req.body.operation);
-    res.render("calculator", { calculationScreen: calculation, calHistory: x });
-  }
-
-  if (req.body.equal) {
-    handleEqual();
-    res.render("calculator", { calculationScreen: result, calHistory: x });
-  }
-
-  if (req.body.ac) {
-    handleAC();
-    res.render("calculator", { calculationScreen: result, calHistory: x });
-  }
-
-  if (req.body.DEL) {
-    handleDel();
-    res.render("calculator", { calculationScreen: calculation, calHistory: x });
-  }
-
-  if (req.body.percentage) {
-    handlePercentage();
-    res.render("calculator", { calculationScreen: result, calHistory: x });
-    // result = "";
-    // calculation = "";
+  if(req.body.inputValue||req.body.result){
+inputValue = req.body.inputValue;
+resultCal = req.body.result;
   }
 
   if (req.body.name) {
     const userName = _.kebabCase(req.body.name);
-    await saveOrUpdateCalculation(userName);
+    await saveOrUpdateCalculation(userName,resultCal,inputValue);
     res.redirect("/");
   }
 
@@ -92,57 +64,22 @@ async function fetchCalHistory() {
   return await Cal.find({});
 }
 
-function handleNumberOrOperation(number, operation) {
-  if (number) {
-    calculation += number;
-  }
-  if (operation) {
-    calculation += operation;
-  }
-}
 
-function handleEqual() {
-  try {
-    result = eval(calculation);
-  } catch (err) {
-    result = "Syntax-Error";
-  }
-  tempCal = calculation;
-  calculation = "";
-}
 
-function handleAC() {
-  result = "";
-  calculation = "";
-}
-
-function handleDel() {
-  calculation = calculation.slice(0, -1);
-}
-
-function handlePercentage() {
-  try {
-    result = eval(calculation) / 100;
-    tempCal = calculation + "%";
-    calculation = "";
-  } catch (err) {
-    result = "Syntax-Error";
-  }
-}
-
-async function saveOrUpdateCalculation(userName) {
+async function saveOrUpdateCalculation(userName,resultCal,inputValue) {
+  
   const existingCal = await Cal.findOne({ name: userName }).exec();
   if (!existingCal) {
-    result = String(result).replace(/^0/, '').slice(0, 5);
+    result = String(resultCal).replace(/^0/, '').slice(0, 5);
     const cal = new Cal({
       name: userName,
-      calculation: tempCal,
-      result: result
+      calculation: inputValue,
+      result: resultCal
     });
     cal.save();
   } else {
     const filter = { name: userName };
-    const update = { calculation: tempCal, result: result };
+    const update = { calculation: inputValue, result: resultCal};
     await Cal.findOneAndUpdate(filter, update, { new: true });
   }
 }
