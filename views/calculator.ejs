@@ -10,7 +10,7 @@
                         <div class="col">
                             <input class="screen" type="text" name="screen" value="">
                         </div>
-                        <form  id="myForm">
+                        <form >
                     </div>
                     <div class="row row-2">
                         <div class="col   dark-grey-button">
@@ -97,7 +97,7 @@
         </div>
         <div class="container-fluid calculation-name">
             <p>Calculation Name</p>
-            <form action="/" method="post">
+            <form id="myForm">
                 <input type="text" name="name" placeholder="Enter Name">
                 <button class="btn btn-primary" type="submit">Save</button>
             </form>
@@ -111,6 +111,26 @@
         var temp="";
         let result ="";
         let calhis = "";
+
+        $(document).ready(function() {
+    $('#myForm').submit(function(event) {
+
+        // Get the input value
+        var inputValue = $('input[name="name"]').val();
+
+        // Send the AJAX POST request
+        $.post('/', { name: inputValue })
+            .done(function(response) {
+                // Handle the success response
+                console.log(response);
+            })
+            .fail(function(error) {
+                // Handle the error
+                console.log(error);
+            });
+    });
+});
+
         function sendData(event) {
             event.preventDefault(); // Prevent form submission
             
