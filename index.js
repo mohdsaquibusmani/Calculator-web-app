@@ -30,9 +30,7 @@ async function main() {
 
 
 
-app.listen(PORT, () => {
-  console.log(`Server has started on port ${PORT}`);
-});
+
 
 let resultCal = "";
 let inputValue = "";
@@ -48,6 +46,7 @@ resultCal = req.body.result;
   }
 
   if (req.body.name) {
+    console.log(inputValue,resultCal);
     const userName = _.kebabCase(req.body.name);
     await saveOrUpdateCalculation(userName,resultCal,inputValue);
     res.redirect("/");
@@ -83,3 +82,7 @@ async function saveOrUpdateCalculation(userName,resultCal,inputValue) {
     await Cal.findOneAndUpdate(filter, update, { new: true });
   }
 }
+
+app.listen(PORT, () => {
+  console.log(`Server has started on port ${PORT}`);
+});
