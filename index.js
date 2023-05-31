@@ -91,7 +91,6 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const ejs = require("ejs");
 const mongoose = require("mongoose");
-//require database-model
 const Cal = require("./models/calculation");
 const _ = require("lodash");
 
@@ -107,14 +106,15 @@ main().catch(err => console.log(err));
 let resultCal = "";
 let inputValue = "";
 
-// Flag to track if the server is already started
-let serverStarted = false;
-
 async function main() {
   try {
     await mongoose.connect(process.env.MONGO_URI);
     console.log("DB connected");
-    startServer(); // Start the server after the database connection is established
+
+    // Check if the server is already started
+    if (require.main === module) {
+      startServer();
+    }
   } catch (err) {
     console.log(err);
     process.exit(1);
@@ -132,7 +132,7 @@ app.post("/", async (req, res) => {
     resultCal = req.body.result;
     console.log(inputValue,resultCal,"HI1");
   }
-
+  
   if (req.body.name) {
     console.log(inputValue,resultCal,"HI2");
     const userName = _.kebabCase(req.body.name);
@@ -169,11 +169,10 @@ async function saveOrUpdateCalculation(userName, resultCal, inputValue) {
 }
 
 function startServer() {
-  if (!serverStarted) {
-    const PORT = process.env.PORT || 3000;
-    app.listen(PORT, () => {
-      console.log(`Server has started on port ${PORT}`);
-    });
-    serverStarted = true;
-  }
+  const PORT = process.env.PORT || 3000;
+  app.listen(PORT, () => {
+    console.log(`Server has started on port ${PORT}`);
+  });
 }
+
+
