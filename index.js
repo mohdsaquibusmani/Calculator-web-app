@@ -104,6 +104,12 @@ mongoose.set("strictQuery", false);
 
 main().catch(err => console.log(err));
 
+let resultCal = "";
+let inputValue = "";
+
+// Flag to track if the server is already started
+let serverStarted = false;
+
 async function main() {
   try {
     await mongoose.connect(process.env.MONGO_URI);
@@ -114,9 +120,6 @@ async function main() {
     process.exit(1);
   }
 }
-
-let resultCal = "";
-let inputValue = "";
 
 app.get("/", async (req, res) => {
   const x = await fetchCalHistory();
@@ -164,8 +167,11 @@ async function saveOrUpdateCalculation(userName, resultCal, inputValue) {
 }
 
 function startServer() {
-  const PORT = process.env.PORT || 3000;
-  app.listen(PORT, () => {
-    console.log(`Server has started on port ${PORT}`);
-  });
+  if (!serverStarted) {
+    const PORT = process.env.PORT || 3000;
+    app.listen(PORT, () => {
+      console.log(`Server has started on port ${PORT}`);
+    });
+    serverStarted = true;
+  }
 }
