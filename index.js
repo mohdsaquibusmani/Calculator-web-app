@@ -130,9 +130,11 @@ app.post("/", async (req, res) => {
   if (req.body.inputValue || req.body.result) {
     inputValue = req.body.inputValue;
     resultCal = req.body.result;
+    console.log(inputValue,resultCal,"HI1");
   }
 
   if (req.body.name) {
+    console.log(inputValue,resultCal,"HI2");
     const userName = _.kebabCase(req.body.name);
     await saveOrUpdateCalculation(userName, resultCal, inputValue);
     res.redirect("/");
